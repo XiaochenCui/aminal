@@ -11,13 +11,6 @@ jobs:
       - checkout
       - run: go test -v ./...
   release:
-    requires:
-      - build
-    filters:
-      tags: 
-        only: /^.+/
-      branches:
-        ignore: /.*/
     docker:
       - image: goreleaser/goreleaser
     steps:
@@ -28,4 +21,11 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - release
+      - release:
+          requires:
+            - build
+          filters:
+            tags: 
+              only: /^.+/
+            branches:
+              ignore: /.*/
