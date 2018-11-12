@@ -12,8 +12,9 @@ jobs:
       - checkout
       - run: go test -v ./...
   release:
-    tags: 
-      only: /.+/
+    filters:
+      tags: 
+        only: /.+/
     docker:
       - image: goreleaser/goreleaser
     steps:
