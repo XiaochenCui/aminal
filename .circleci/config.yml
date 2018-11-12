@@ -11,3 +11,9 @@ jobs:
     steps:
       - checkout
       - run: go test -v ./...
+  release:
+    tag: /.+/
+    docker:
+      - image: goreleaser/goreleaser
+    steps:
+      - run: goreleaser
