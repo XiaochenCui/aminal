@@ -12,7 +12,7 @@ jobs:
       - run: go test -v ./...
   release:
     requires:
-      - build-test
+      - build
     filters:
       tags: 
         only: /^.+/
@@ -21,6 +21,7 @@ jobs:
     docker:
       - image: goreleaser/goreleaser
     steps:
+      - checkout
       - run: goreleaser
 workflows:
   version: 2
