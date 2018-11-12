@@ -3,19 +3,24 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
-  build:
-    docker:
-      # specify the version
-      - image: liamg/golang-opengl
-    working_directory: /aminal
-    steps:
-      - checkout
-      - run: go test -v ./...
-  release:
-    filters:
-      tags: 
-        only: /.+/
-    docker:
-      - image: goreleaser/goreleaser
-    steps:
-      - run: goreleaser
+  build-test-release:
+    jobs:
+      - build-test:
+          docker:
+            - image: liamg/golang-opengl
+          working_directory: /aminal
+          steps:
+            - checkout
+            - run: go test -v ./...
+      - release:
+          requires:
+            - build-test
+          filters:
+            tags: 
+              only: /^.+/
+            branches:
+              ignore: /.*/
+          docker:
+            - image: goreleaser/goreleaser
+          steps:
+            - run: goreleaser
